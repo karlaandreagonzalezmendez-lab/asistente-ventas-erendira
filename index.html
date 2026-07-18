@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asistente de Ventas — Eréndira</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --verde: #4A7C59;
+    --verde-osc: #2E5E3E;
+    --verde-claro: #C8E6C9;
+    --verde-bg: #F0F7F1;
+    --blanco: #ffffff;
+    --gris: #F5F7F5;
+    --texto: #1a2e1e;
+    --texto-suave: #6b8c72;
+    --borde: #d4e8d8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--verde-bg);
+    min-height: 100vh;
+    color: var(--texto);
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--verde-osc), var(--verde));
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(46,94,62,0.3);
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .logo { font-size: 28px; }
+  .header-left h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 700;
+  }
+  .header-left p { font-size: 11px; color: var(--verde-claro); letter-spacing: 1.5px; text-transform: uppercase; }
+  .header-badge {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--blanco);
+    border-radius: 16px;
+    padding: 22px;
+    border: 1px solid var(--borde);
+    box-shadow: 0 2px 8px rgba(74,124,89,0.08);
+  }
+
+  .card-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* TIPO DE EVENTO */
+  .tipo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .tipo-btn {
+    padding: 10px 8px;
+    border: 2px solid var(--borde);
+    border-radius: 10px;
+    background: var(--gris);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--texto-suave);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: 'Lato', sans-serif;
+  }
+  .tipo-btn:hover { border-color: var(--verde); color: var(--verde); background: var(--verde-bg); }
+  .tipo-btn.active { border-color: var(--verde); background: var(--verde); color: #fff; }
+  .tipo-btn .tipo-icon { font-size: 18px; display: block; margin-bottom: 4px; }
+
+  /* CANAL */
+  .canal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .canal-btn {
+    padding: 10px 8px;
+    border: 2px solid var(--borde);
+    border-radius: 10px;
+    background: var(--gris);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--texto-suave);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: 'Lato', sans-serif;
+  }
+  .canal-btn:hover { border-color: var(--verde); color: var(--verde); background: var(--verde-bg); }
+  .canal-btn.active { border-color: var(--verde); background: var(--verde); color: #fff; }
+
+  /* ETAPA */
+  .etapa-list { display: flex; flex-direction: column; gap: 8px; }
+  .etapa-btn {
+    padding: 12px 16px;
+    border: 2px solid var(--borde);
+    border-radius: 10px;
+    background: var(--gris);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--texto-suave);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    font-family: 'Lato', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .etapa-btn:hover { border-color: var(--verde); color: var(--verde); background: var(--verde-bg); }
+  .etapa-btn.active { border-color: var(--verde); background: var(--verde); color: #fff; }
+  .etapa-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+  .etapa-btn:not(.active) .etapa-num { background: var(--verde-claro); color: var(--verde-osc); }
+
+  /* TEXTAREA */
+  textarea {
+    width: 100%;
+    min-height: 110px;
+    border: 2px solid var(--borde);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-family: 'Lato', sans-serif;
+    color: var(--texto);
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--gris);
+    line-height: 1.5;
+  }
+  textarea:focus { border-color: var(--verde); background: #fff; }
+  textarea::placeholder { color: #aac0ae; }
+
+  /* BOTÓN GENERAR */
+  .btn-generar {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--verde-osc), var(--verde));
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 900;
+    font-family: 'Lato', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .btn-generar:hover { opacity: 0.92; transform: translateY(-1px); }
+  .btn-generar:active { transform: translateY(0); }
+  .btn-generar:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* RESPUESTA */
+  .respuesta-box {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .respuesta-box.visible { display: flex; }
+
+  .respuesta-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--verde);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .respuesta-texto {
+    background: var(--verde-bg);
+    border: 2px solid var(--verde-claro);
+    border-radius: 12px;
+    padding: 18px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--texto);
+    white-space: pre-wrap;
+    min-height: 80px;
+  }
+
+  .respuesta-acciones {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-copiar {
+    flex: 1;
+    padding: 12px;
+    background: var(--verde);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Lato', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-copiar:hover { opacity: 0.88; }
+
+  .btn-regenerar {
+    padding: 12px 18px;
+    background: var(--gris);
+    color: var(--verde);
+    border: 2px solid var(--borde);
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Lato', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-regenerar:hover { border-color: var(--verde); background: var(--verde-bg); }
+
+  /* CONSEJO */
+  .consejo-box {
+    background: #FFFDE7;
+    border: 1px solid #F9E98E;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #5D4E08;
+    line-height: 1.5;
+    display: none;
+  }
+  .consejo-box.visible { display: block; }
+  .consejo-box strong { display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* LOADING */
+  .loading { display: none; align-items: center; gap: 10px; color: var(--verde); font-size: 13px; font-weight: 700; }
+  .loading.visible { display: flex; }
+  .spinner {
+    width: 20px; height: 20px;
+    border: 3px solid var(--verde-claro);
+    border-top-color: var(--verde);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 11px;
+    color: var(--texto-suave);
+    letter-spacing: 1px;
+  }
+
+  /* COPIADO */
+  .copiado-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--verde-osc);
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 700;
+    transition: transform 0.3s;
+    z-index: 100;
+  }
+  .copiado-toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <span class="logo">🌸</span>
+    <div>
+      <h1>Asistente de Ventas</h1>
+      <p>Eréndira Florería y Eventos</p>
+    </div>
+  </div>
+  <div class="header-badge">IA · Los Reyes</div>
+</header>
+
+<div class="container">
+
+  <!-- TIPO DE EVENTO -->
+  <div class="card">
+    <div class="card-title">🎉 Tipo de evento</div>
+    <div class="tipo-grid">
+      <button class="tipo-btn active" data-tipo="Boda" onclick="selTipo(this)">
+        <span class="tipo-icon">💍</span>Boda
+      </button>
+      <button class="tipo-btn" data-tipo="Quinceañera" onclick="selTipo(this)">
+        <span class="tipo-icon">👑</span>Quinceañera
+      </button>
+      <button class="tipo-btn" data-tipo="Bautizo" onclick="selTipo(this)">
+        <span class="tipo-icon">👶</span>Bautizo
+      </button>
+      <button class="tipo-btn" data-tipo="Primera Comunión" onclick="selTipo(this)">
+        <span class="tipo-icon">🕊️</span>Comunión
+      </button>
+      <button class="tipo-btn" data-tipo="Evento Corporativo" onclick="selTipo(this)">
+        <span class="tipo-icon">🏢</span>Corporativo
+      </button>
+      <button class="tipo-btn" data-tipo="Otro evento" onclick="selTipo(this)">
+        <span class="tipo-icon">🎊</span>Otro
+      </button>
+    </div>
+  </div>
+
+  <!-- CANAL -->
+  <div class="card">
+    <div class="card-title">📲 Canal de contacto</div>
+    <div class="canal-grid">
+      <button class="canal-btn active" data-canal="WhatsApp" onclick="selCanal(this)">💬 WhatsApp</button>
+      <button class="canal-btn" data-canal="Facebook" onclick="selCanal(this)">📘 Facebook</button>
+      <button class="canal-btn" data-canal="Instagram" onclick="selCanal(this)">📸 Instagram</button>
+    </div>
+  </div>
+
+  <!-- ETAPA -->
+  <div class="card">
+    <div class="card-title">🗺️ Etapa de la conversación</div>
+    <div class="etapa-list">
+      <button class="etapa-btn active" data-etapa="primer_contacto" onclick="selEtapa(this)">
+        <span class="etapa-num">1</span>Primer contacto — nunca ha hablado conmigo
+      </button>
+      <button class="etapa-btn" data-etapa="pregunta_precio" onclick="selEtapa(this)">
+        <span class="etapa-num">2</span>Me pregunta el precio
+      </button>
+      <button class="etapa-btn" data-etapa="agendar_cita" onclick="selEtapa(this)">
+        <span class="etapa-num">3</span>Quiero agendar una cita
+      </button>
+      <button class="etapa-btn" data-etapa="sin_respuesta" onclick="selEtapa(this)">
+        <span class="etapa-num">4</span>No me ha respondido — quiero reactivarla
+      </button>
+      <button class="etapa-btn" data-etapa="recordatorio_cita" onclick="selEtapa(this)">
+        <span class="etapa-num">5</span>Recordatorio de cita (día anterior)
+      </button>
+      <button class="etapa-btn" data-etapa="respuesta_publicacion" onclick="selEtapa(this)">
+        <span class="etapa-num">6</span>Responder publicación en Facebook/Instagram
+      </button>
+    </div>
+  </div>
+
+  <!-- MENSAJE -->
+  <div class="card">
+    <div class="card-title">✍️ Mensaje o contexto del prospecto</div>
+    <textarea id="mensajeInput" placeholder="Escribe aquí lo que te escribió el prospecto, o el contexto de la situación. Por ejemplo: 'Me escribió preguntando cuánto cobran por decoración de boda para 150 personas en mayo...'"></textarea>
+  </div>
+
+  <!-- BOTÓN -->
+  <button class="btn-generar" onclick="generarRespuesta()" id="btnGenerar">
+    <span>✨</span> Generar respuesta
+  </button>
+
+  <!-- LOADING -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    Generando tu respuesta ideal...
+  </div>
+
+  <!-- RESPUESTA -->
+  <div class="respuesta-box" id="respuestaBox">
+    <div class="card">
+      <div class="respuesta-label">💬 Respuesta sugerida</div>
+      <div style="height:12px"></div>
+      <div class="respuesta-texto" id="respuestaTexto"></div>
+      <div style="height:14px"></div>
+      <div class="respuesta-acciones">
+        <button class="btn-copiar" onclick="copiarRespuesta()">📋 Copiar respuesta</button>
+        <button class="btn-regenerar" onclick="generarRespuesta()">🔄 Otra versión</button>
+      </div>
+    </div>
+    <div class="consejo-box visible" id="consejoBox"></div>
+  </div>
+
+</div>
+
+<footer>🌸 Eréndira Florería y Eventos · Los Reyes, Michoacán</footer>
+
+<div class="copiado-toast" id="toast">✅ Respuesta copiada</div>
+
+<script>
+  let tipoSeleccionado = "Boda";
+  let canalSeleccionado = "WhatsApp";
+  let etapaSeleccionada = "primer_contacto";
+
+  function selTipo(btn) {
+    document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    tipoSeleccionado = btn.dataset.tipo;
+  }
+
+  function selCanal(btn) {
+    document.querySelectorAll('.canal-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    canalSeleccionado = btn.dataset.canal;
+  }
+
+  function selEtapa(btn) {
+    document.querySelectorAll('.etapa-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    etapaSeleccionada = btn.dataset.etapa;
+  }
+
+  const CONSEJOS = {
+    primer_contacto: "💡 Recuerda: NO menciones precios todavía. El objetivo es abrir la conversación y terminar con una pregunta.",
+    pregunta_precio: "💡 No des precio exacto — todo es personalizado. Usa este momento para proponer la cita.",
+    agendar_cita: "💡 Propón TÚ el día y hora — máximo 3 opciones. Nunca dejes que el prospecto proponga.",
+    sin_respuesta: "💡 Tono suave, sin presión. Un solo mensaje de reactivación. Si no responde, espera 3 días antes de intentar de nuevo.",
+    recordatorio_cita: "💡 Mensaje corto y cálido. Solo recuérdale la cita — no agregues información nueva.",
+    respuesta_publicacion: "💡 Comenta con emoción + número de contacto. Inmediatamente escríbele por privado también."
+  };
+
+  async function generarRespuesta() {
+    const mensaje = document.getElementById('mensajeInput').value.trim();
+    
+    document.getElementById('btnGenerar').disabled = true;
+    document.getElementById('loading').classList.add('visible');
+    document.getElementById('respuestaBox').classList.remove('visible');
+
+    const etapasTexto = {
+      primer_contacto: "Es el primer contacto con el prospecto",
+      pregunta_precio: "El prospecto preguntó por el precio o presupuesto",
+      agendar_cita: "Queremos proponer una cita de asesoría",
+      sin_respuesta: "El prospecto no ha respondido y queremos reactivar la conversación",
+      recordatorio_cita: "Es el recordatorio de una cita ya agendada para mañana",
+      respuesta_publicacion: "El prospecto publicó en redes sociales buscando servicio de decoración"
+    };
+
+    const prompt = `Eres el asistente de ventas de Eréndira Florería y Eventos, un negocio con más de 20 años de experiencia en decoración floral y eventos en Los Reyes, Michoacán, México.
+
+Tu trabajo es generar respuestas de ventas perfectas para Karla o Luis, quienes atienden prospectos.
+
+REGLAS INQUEBRANTABLES:
+- Tono cálido, cercano y profesional. Usa "bonita" o el nombre si se conoce.
+- NUNCA des precios — todo es personalizado y se define en cita.
+- SIEMPRE termina con una pregunta o llamado a la acción claro.
+- Menciona los 20 años de experiencia cuando sea relevante.
+- El negocio se llama "Eréndira Florería y Eventos".
+- El número de WhatsApp es 354 100 1458.
+- Si es evento corporativo, el tono debe ser más formal y profesional, sin "bonita".
+- Máximo 4-5 líneas — mensaje conciso y directo.
+- Conecta siempre con la emoción del evento (boda, quinceañera, etc).
+- Si es publicación en redes, el comentario debe ser corto y terminar invitando a escribir al número.
+
+SITUACIÓN ACTUAL:
+- Tipo de evento: ${tipoSeleccionado}
+- Canal: ${canalSeleccionado}
+- Etapa: ${etapasTexto[etapaSeleccionada]}
+- Contexto o mensaje del prospecto: ${mensaje || "Sin contexto adicional proporcionado"}
+
+Genera ÚNICAMENTE el mensaje de respuesta, listo para copiar y enviar. Sin explicaciones, sin comillas, sin introducción. Solo el mensaje.`;
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6",
+          max_tokens: 1000,
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+
+      const data = await response.json();
+      const texto = data.content?.[0]?.text || "No se pudo generar la respuesta. Intenta de nuevo.";
+
+      document.getElementById('respuestaTexto').textContent = texto;
+      document.getElementById('consejoBox').innerHTML = `<strong>💡 Consejo</strong>${CONSEJOS[etapaSeleccionada]}`;
+      document.getElementById('respuestaBox').classList.add('visible');
+
+    } catch (error) {
+      document.getElementById('respuestaTexto').textContent = "Hubo un error al conectar. Verifica tu conexión e intenta de nuevo.";
+      document.getElementById('respuestaBox').classList.add('visible');
+    }
+
+    document.getElementById('btnGenerar').disabled = false;
+    document.getElementById('loading').classList.remove('visible');
+  }
+
+  function copiarRespuesta() {
+    const texto = document.getElementById('respuestaTexto').textContent;
+    navigator.clipboard.writeText(texto).then(() => {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    });
+  }
+</script>
+</body>
+</html>
